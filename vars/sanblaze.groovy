@@ -113,7 +113,7 @@ def waitForState(ip, s, p, t, l, T, expectedstates, timeout){
  *           passtimer - time to run each pass (note: only for tests that are not "one shot", such as "Inquiry")
  */
 def stageTest(ip, s, p, t, l, index, name, passes, passtimer){
-    echo "Waiting for state " + expectedstates
+    echo "running stageTest " + name
     def checkstate = httpRequest (consoleLogResponseBody: true, 
         contentType: 'APPLICATION_JSON', 
         httpMode: 'POST', 
@@ -122,4 +122,5 @@ def stageTest(ip, s, p, t, l, index, name, passes, passtimer){
         validResponseCodes: '200')
     println('getStatus: ' + checkstate.status)
     println('getResponse: ' + checkstate.content)
+    return 0
 }
