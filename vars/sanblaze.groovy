@@ -108,6 +108,7 @@ def waitForState(ip, s, p, t, l, T, expectedstates, timeout){
  *                   p - port number of the SBExpress system NVMe port
  *                   t - controller number for the target
  *                   l - namespace on the specified controller
+ *               index - run sequence order for test, use -1 for auto assign
  *                name - name of the test, including one parent directory (example: NVMe_Generic/NVMe_AsyncEventRequest.sh)
  *              passes - number of times to run the test (default is one)
  *           passtimer - time to run each pass (note: only for tests that are not "one shot", such as "Inquiry")
@@ -118,7 +119,7 @@ def stageTest(ip, s, p, t, l, index, name, passes, passtimer){
         contentType: 'APPLICATION_JSON', 
         httpMode: 'POST', 
         url: "http://" + ip + "/goform/TestManagerAdd",
-        requestBody: '-d express=1&ok=Add&system=2&port=0&target=200&lun=1&index=-1 &passes=1&passtimer=0&script=NVMe_Generic/NVMe_AsyncEventRequest.sh', 
+        requestBody: '-d express=1&ok=Add&system=' + s + '&port=' + p + '&target=' + t + '&lun=' + l + '&index=' + index + '&passes=' + passes + '&passtimer=' + passtimer + '&script=' + name + '', 
         validResponseCodes: '200')
     println('getStatus: ' + checkstate.status)
     println('getResponse: ' + checkstate.content)
