@@ -72,7 +72,7 @@ def deleteAllTests(ip, s, p, t, l){
     def delete = httpRequest (consoleLogResponseBody: true, 
         contentType: 'APPLICATION_JSON', 
         httpMode: 'POST', 
-        requestBody: delete,
+        requestBody: 'delete',
         url: "http://" + ip + "/goform/JsonApi?op=rest/sanblazes/" + s + "/ports/" + p + "/targets/" + t + "/luns/" + l + "/tests/requestedscriptstate", 
         validResponseCodes: '200')
 //    writeFile file: 'delete.txt', text: delete.content
