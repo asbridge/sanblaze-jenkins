@@ -58,7 +58,7 @@ def scriptAction(ip, s, p, t, l, T, action, requestedscriptstate){
     def props = readJSON text: start.content
     echo props[0].requestedscriptstate
     if (props[0].requestedscriptstate == requestedscriptstate){
-        echo "Sucess! requestedscriptstate=" + requestedscriptstate
+        echo "Success! requestedscriptstate=" + requestedscriptstate
     } else {
         echo "Failure! requestedscriptstate=" + props[0].requestedscriptstate + " expected=" + requestedscriptstate
     }
@@ -86,7 +86,7 @@ def waitForState(ip, s, p, t, l, T, expectedstates, timeout){
         // this needs to walk a list of expectedstates
         echo "scriptstate=" + props1[0].scriptstate
         if (props1[0].scriptstate == expectedstates){
-            echo "Sucess! requestedscriptstate=" + expectedstates
+            echo "Success! requestedscriptstate=" + expectedstates
             return 0
         } else {
             echo "Failure! requestedscriptstate=" + props1[0].scriptstate + " expected=" + expectedstates
@@ -97,4 +97,29 @@ def waitForState(ip, s, p, t, l, T, expectedstates, timeout){
     // If we get here, we failed
     currentBuild.result = "FAILURE"
     sh "exit 1"
+}
+
+/*
+ * stageTest - Given a test name, and system, port, controller, namespace, assigns the test to the device
+ *             Returns zero for success and one for failure
+ *             Parameters:
+ *                  ip - ip address of target system
+ *                   s - system number of the SBExpress system
+ *                   p - port number of the SBExpress system NVMe port
+ *                   t - controller number for the target
+ *                   l - namespace on the specified controller
+ *                name - name of the test, including one parent directory (example: NVMe_Generic/NVMe_AsyncEventRequest.sh)
+ *              passes - number of times to run the test (default is one)
+ *           passtimer - time to run each pass (note: only for tests that are not "one shot", such as "Inquiry")
+ */
+def stageTest(ip, s, p, t, l, index, name, passes, passtimer){
+    echo "Waiting for state " + expectedstates
+    def checkstate = httpRequest (consoleLogResponseBody: true, 
+        contentType: 'APPLICATION_JSON', 
+        httpMode: 'POST', 
+        url: "http://" + ip + "/goform/JsonApi?op=rest/sanblazes/" + s + "/ports/" + p + "/targets/" + t + "/luns/" + l + "/tests/" + T + "/scriptstate",
+        requestBody: '-d express=1&ok=Add&system=2&port=0&target=200&lun=1&index=-1 &passes=1&passtimer=0&script=NVMe_Generic/NVMe_AsyncEventRequest.sh', 
+        validResponseCodes: '200')
+    println('getStatus: ' + checkstate.status)
+    println('getResponse: ' + checkstate.content)
 }
