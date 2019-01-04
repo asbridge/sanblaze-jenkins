@@ -68,6 +68,7 @@ def scriptAction(ip, s, p, t, l, T, action, requestedscriptstate){
  * deleteAllTests - Delete all tests previously staged on this s,p,t,l
  */
 def deleteAllTests(ip, s, p, t, l){
+    echo "deleteAllTests on ip=" + ip + " s=" + s + " p=" + p + " t=" + t + " l=" + l
     def delete = httpRequest (consoleLogResponseBody: true, 
         contentType: 'APPLICATION_JSON', 
         httpMode: 'POST', 
