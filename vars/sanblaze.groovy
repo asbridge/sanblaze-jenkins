@@ -117,7 +117,7 @@ def stageTest(ip, s, p, t, l, index, name, passes, passtimer){
     def checkstate = httpRequest (consoleLogResponseBody: true, 
         contentType: 'APPLICATION_JSON', 
         httpMode: 'POST', 
-        url: "http://" + ip + "/goform/JsonApi?op=rest/sanblazes/" + s + "/ports/" + p + "/targets/" + t + "/luns/" + l + "/tests/" + T + "/scriptstate",
+        url: "http://" + ip + "/goform/TestManagerAdd",
         requestBody: '-d express=1&ok=Add&system=2&port=0&target=200&lun=1&index=-1 &passes=1&passtimer=0&script=NVMe_Generic/NVMe_AsyncEventRequest.sh', 
         validResponseCodes: '200')
     println('getStatus: ' + checkstate.status)
