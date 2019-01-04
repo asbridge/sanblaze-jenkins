@@ -65,6 +65,28 @@ def scriptAction(ip, s, p, t, l, T, action, requestedscriptstate){
 }
 
 /*
+ * deleteAllTests - Delete all tests previously staged on this s,p,t,l
+ */
+def deleteAllTests(ip, s, p, t, l){
+    def delete = httpRequest (consoleLogResponseBody: true, 
+        contentType: 'APPLICATION_JSON', 
+        httpMode: 'POST', 
+        requestBody: delete,
+        url: "http://" + ip + "/goform/JsonApi?op=rest/sanblazes/" + s + "/ports/" + p + "/targets/" + t + "/luns/" + l + "/tests/requestedscriptstate", 
+        validResponseCodes: '200')
+//    writeFile file: 'delete.txt', text: delete.content
+    println('Status: ' + delete.status)
+    println('Response: ' + delete.content)
+    def props = readJSON text: delete.content
+    echo props[0].requestedscriptstate
+    if (props[0].requestedscriptstate == "delete"){
+        echo "Success! requestedscriptstate=delete"
+    } else {
+        echo "Failure! requestedscriptstate=" + props[0].requestedscriptstate + " expected=delete"
+    }
+}
+
+/*
  * waitForState -   Given a specific test, wait for the test to reach expectedstates (one at the moment)
  *                  Returns zero if the state is reached before timeout seconds, or one if the state is not reached
  */
